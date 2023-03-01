@@ -1,0 +1,25 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nettyserver;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
+
+/**
+ *
+ * @author apple
+ */
+public class TimeEncoder extends ChannelOutboundHandlerAdapter {
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
+        UnixTime m = (UnixTime) msg;
+        ByteBuf encoded = ctx.alloc().buffer(4);
+        encoded.writeInt((int)m.value());
+        ctx.write(encoded, promise); // (1)
+    }
+}
